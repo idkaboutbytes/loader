@@ -1,0 +1,10 @@
+name = "idkaboutbytes/loader"
+version = "1.2.0"
+description = "String-based package loader for the Packages framework."
+license = "MIT"
+authors = ["idkaboutbytes"]
+includes = ["pesde.toml", "README.md", "CHANGELOG.md", "src/**/*.luau", "default.project.json", "sourcemap.json"]
+
+[target]
+environment = "roblox"
+lib = "src/init.luau"
