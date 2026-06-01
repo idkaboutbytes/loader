@@ -1,0 +1,15 @@
+name = "idkaboutbytes/loader"
+version = "1.0.0"
+description = "String-based package loader for the Packages framework."
+license = "MIT"
+authors = ["idkaboutbytes"]
+repository = "https://github.com/idkaboutbytes/loader"
+includes = ["pesde.toml", "README.md", "CHANGELOG.md", "src/**/*.luau", "default.project.json", "sourcemap.json"]
+
+[target]
+environment = "roblox"
+lib = "src/init.luau"
+build_files = ["src"]
+
+[wally_indices]
+default = "https://github.com/UpliftGames/wally-index"
