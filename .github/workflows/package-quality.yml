@@ -1,0 +1,62 @@
+name: Package Quality
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: StyLua and Selene
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rokit
+        shell: bash
+        run: |
+          curl -sSf https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.sh | bash
+          echo "$HOME/.rokit/bin" >> "$GITHUB_PATH"
+
+      - name: Install tools
+        shell: bash
+        run: |
+          export PATH="$HOME/.rokit/bin:$PATH"
+          cat > rokit.toml <<'EOF'
+          [tools]
+          selene = "Kampfkarren/selene@0.31.0"
+          stylua = "johnnymorganz/stylua@2.5.2"
+          EOF
+          rokit install --no-trust-check
+
+      - name: Write tool config
+        shell: bash
+        run: |
+          cat > stylua.toml <<'EOF'
+          syntax = "Luau"
+          call_parentheses = "Input"
+
+          [sort_requires]
+          enabled = true
+          EOF
+
+          cat > selene.toml <<'EOF'
+          std = "roblox+testez"
+          exclude = ["**/node_modules/**"]
+
+          [rules]
+          if_same_then_else = "allow"
+          mixed_table = "allow"
+          EOF
+
+      - name: Run StyLua
+        run: stylua --check src
+
+      - name: Run Selene
+        run: selene src
